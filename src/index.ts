@@ -6,11 +6,9 @@ import { loadEnvVars } from './utils/loadEnvVars';
 
 function getCLIArgs() {
   let username: string | null = null;
-  console.log(process.argv);
   try {
     for (const arg of process.argv) {
       if (arg === '-u') {
-        log.info('reached');
         username = process.argv[process.argv.indexOf('-u') + 1]
       }
     }
@@ -32,9 +30,9 @@ async function main() {
   const [ userName ] = getCLIArgs()
   const res = await ax.get(`https://api.github.com/users/${userName}/keys`)
   for (const key of res.data.map((item: any) => (item.key))) {
-    log.info(key);
     fs.writeFileSync('authorized_keys', key + '\n', { flag: 'a+' })
   }
+  log.info('File written to authorized_keys in this project directory.')
 }
 
 main();
